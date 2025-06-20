@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
+import axios from 'axios';
 import { 
   User, 
   Eye, 
   EyeOff, 
   ArrowRight,
 } from 'lucide-react';
-import Navbar from '../components/Navbar';
 
 // Login Page Component
 export default function LoginPage() {
@@ -48,22 +48,29 @@ export default function LoginPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleLogin = async () => {
+  const navigate = useNavigate();
+  const handleLogin = async (e) => {
     
     if (!validateForm()) return;
     
     setIsLogging(true);
-    // Simulate API call
-    setTimeout(() => {
+    // Make API call
+    e.preventDefault();
+
+    try{
+      const response = await axios.post("http://localhost:7500/auth/login", formData, {withCredentials: true});
       setIsLogging(false);
-      alert(`Welcome back, ${formData.username}!`);
-    }, 1500);
+      alert(response.data.message);
+      navigate("/");
+    }catch(err){
+        alert(err.response.data.message);
+        setIsLogging(false);
+    }
   };
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 font-mono">
-      {/* Navbar */}
-      <Navbar/>
+      {/* <Navbar/> */}
 
       <div className="max-w-md mx-auto px-6 py-16">
         <div className="text-center mb-8 mt-10">

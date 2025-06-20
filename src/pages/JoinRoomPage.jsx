@@ -5,7 +5,6 @@ import {
   Info, 
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import Navbar from '../components/Navbar';
 
 export default function JoinRoomPage() {
   const [roomId, setRoomId] = useState('');
@@ -24,7 +23,7 @@ export default function JoinRoomPage() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 font-mono">
-      <Navbar/>
+      {/* <Navbar/> */}
 
       <div className="max-w-2xl mx-auto px-6 py-16">
         <div className="text-center mb-12 mt-12">

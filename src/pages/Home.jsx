@@ -7,8 +7,8 @@ import Footer from '../components/Footer';
 export default function Homepage() {
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 font-mono">
-      <Navbar/>
 
+      {/* <Navbar/> */}
       <HeroSection/>
 
       <FeatureSection/>

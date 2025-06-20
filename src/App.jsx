@@ -5,12 +5,14 @@ import CreateRoomPage from "./pages/CreateRoomPage";
 import ScrollToTop from './components/ScrollToTop';
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage"
+import Navbar from "./components/Navbar";
 function App() {
   return (
       <Router>
-      <ScrollToTop/>
+        <Navbar/>
+        <ScrollToTop/>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home/>} />
           <Route path="/join-room" element={<JoinRoomPage/>}/>
           <Route path="/create-room" element={<CreateRoomPage/>}/>
           <Route path="/login" element={<LoginPage/>}/>

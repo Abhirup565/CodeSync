@@ -1,6 +1,6 @@
-import Navbar from "../components/Navbar";
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import React, { useState } from 'react';
+import axios from "axios";
 import { 
   Eye, 
   EyeOff, 
@@ -35,18 +35,24 @@ export default function RegisterPage() {
     setUsernameStatus({ checking: true, available: null, message: '' });
     
     // Simulate API call
-    setTimeout(() => {
-      // Mock availability check - usernames starting with 'admin' or 'test' are taken
-      const isTaken = username.toLowerCase().startsWith('admin') || 
-                     username.toLowerCase().startsWith('test') ||
-                     username.toLowerCase() === 'user';
-      
+    try{
+      const response = await axios.post("http://localhost:7500/auth/username-exists", {userName: username.toLowerCase()});
+      const isTaken = response.data.isTaken;
+
       setUsernameStatus({
         checking: false,
         available: !isTaken,
         message: isTaken ? 'Username is already taken' : 'Username is available'
-      });
-    }, 800);
+      })
+    }
+    catch(err){
+      console.log(err.response.data);
+      setUsernameStatus({
+        checking: false,
+        available: null,
+        message: ''
+      })
+    }
   };
 
   const handleInputChange = (e) => {
@@ -108,22 +114,29 @@ export default function RegisterPage() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleRegister = async () => {
+  const navigate = useNavigate();
+  const handleRegister = async (e) => {
     
     if (!validateForm()) return;
     
     setIsRegistering(true);
     // Simulate API call
-    setTimeout(() => {
+    e.preventDefault();
+    try{
+      const response = await axios.post("http://localhost:7500/auth/sign-up", formData, {withCredentials: true});
       setIsRegistering(false);
-      alert(`Welcome to CodeSync, ${formData.firstName}!`);
-    }, 1500);
+      alert(response.data.message);
+      navigate('/');
+    }
+    catch(err){
+      setIsRegistering(false);
+      alert(err.response.data.message);
+    }
   };
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 font-mono">
-      {/* Navbar */}
-      <Navbar/>
+      {/* <Navbar/> */}
 
       <div className="max-w-lg mx-auto px-6 py-16">
         <div className="text-center mb-8 mt-10">

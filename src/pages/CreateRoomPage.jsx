@@ -1,5 +1,4 @@
 import {useState} from "react";
-import Navbar from "../components/Navbar";
 import { 
   Code, 
   Copy, 
@@ -60,7 +59,7 @@ export default function CreateRoomPage() {
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 font-mono">
-      <Navbar/>
+      {/* <Navbar/> */}
 
       <div className="max-w-2xl mx-auto px-6 py-16">
         <div className="text-center mb-12 mt-12">
@@ -92,7 +91,7 @@ export default function CreateRoomPage() {
             {/* Programming Language */}
             <div>
               <label className="block text-sm font-semibold mb-2 text-gray-300">
-                Primary Programming Language
+                Programming Language
               </label>
               <select
                 value={selectedLanguage}
@@ -105,9 +104,9 @@ export default function CreateRoomPage() {
                   </option>
                 ))}
               </select>
-              <p className="text-gray-400 text-sm mt-1">
+              {/* <p className="text-gray-400 text-sm mt-1">
                 You can always switch languages later in the editor
-              </p>
+              </p> */}
             </div>
 
             {/* Room ID Generator */}
