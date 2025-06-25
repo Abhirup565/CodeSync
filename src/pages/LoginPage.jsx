@@ -7,6 +7,7 @@ import {
   EyeOff, 
   ArrowRight,
 } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 // Login Page Component
 export default function LoginPage() {
@@ -60,11 +61,11 @@ export default function LoginPage() {
     try{
       const response = await axios.post("http://localhost:7500/auth/login", formData, {withCredentials: true});
       setIsLogging(false);
-      alert(response.data.message);
       navigate("/");
+      toast.success(response.data.message);
     }catch(err){
-        alert(err.response.data.message);
         setIsLogging(false);
+        toast.error(err.response.data.message);
     }
   };
 

@@ -19,7 +19,7 @@ async function loginUser(req, res){
             httpOnly: true,
             secure: false,
             maxAge: 14*24*60*60*1000 // cookie expires in 14 days in millisecond 
-        }).status(200).json({message: `Welcome back, ${username}`});
+        }).status(200).json({message: `Welcome back, ${user.firstname}`});
     }
     catch(err){
         console.log("Error logging in", err);

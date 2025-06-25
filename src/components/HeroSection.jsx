@@ -1,10 +1,20 @@
 import { useEffect, useState } from "react";
 import {Code, Users} from "lucide-react"
 import {Link} from 'react-router-dom';
+import axios from "axios";
 
 export default function HeroSection(){
     const [typewriterText, setTypewriterText] = useState('');
-      
+
+    const [isLoggedIn, setIsLoggedIn] = useState(null);
+    useEffect(()=>{
+        axios.get("http://localhost:7500/auth/profile", {withCredentials: true})
+            .then((response)=>{
+                setIsLoggedIn(response.data.user)}
+            )
+            .catch(()=> setIsLoggedIn(null));
+    }, []);
+
     const codeSnippets = [
       'function collaborate() {',
       '  const room = new Room();',
@@ -59,11 +69,11 @@ export default function HeroSection(){
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-15">
-            <Link to="/join-room"><button className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all transform hover:scale-105 flex items-center space-x-2 cursor-pointer">
+            <Link to={isLoggedIn ? "/join-room" : "/login"}><button className="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all transform hover:scale-105 flex items-center space-x-2 cursor-pointer">
               <Users className="h-5 w-5" />
               <span>Join Room</span>
             </button></Link>
-            <Link to="/create-room"><button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all transform hover:scale-105 flex items-center space-x-2 cursor-pointer">
+            <Link to={isLoggedIn ? "/create-room" : "/login"}><button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-all transform hover:scale-105 flex items-center space-x-2 cursor-pointer">
               <Code className="h-5 w-5" />
               <span>Create Room</span>
             </button></Link>

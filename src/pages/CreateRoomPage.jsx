@@ -8,6 +8,9 @@ import {
   CheckCircle,
   AlertCircle 
 } from 'lucide-react';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import {useNavigate} from 'react-router-dom';
 
 export default function CreateRoomPage() {
   const [roomTitle, setRoomTitle] = useState('');
@@ -32,8 +35,8 @@ export default function CreateRoomPage() {
 
   const generateRoomId = () => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const part1 = Array.from({ length: 3 }, () => chars.charAt(Math.floor(Math.random() * chars.length))).join('');
-    const part2 = Array.from({ length: 3 }, () => chars.charAt(Math.floor(Math.random() * chars.length))).join('');
+    const part1 = Array.from({ length: 4 }, () => chars.charAt(Math.floor(Math.random() * chars.length))).join('');
+    const part2 = Array.from({ length: 4 }, () => chars.charAt(Math.floor(Math.random() * chars.length))).join('');
     const newRoomId = `ROOM-${part1}-${part2}`;
     setGeneratedRoomId(newRoomId);
   };
@@ -46,23 +49,34 @@ export default function CreateRoomPage() {
     }
   };
 
+  const navigate = useNavigate();
   const handleCreateRoom = async () => {
     if (!roomTitle.trim() || !generatedRoomId) return;
     
     setIsCreating(true);
-    // Simulate API call
-    setTimeout(() => {
+    // Making API call
+    try{
+      const response = await axios.post("http://localhost:7500/room/create-room", {roomTitle, selectedLanguage, generatedRoomId}, {withCredentials: true});
+      toast.success(response.data.message);
       setIsCreating(false);
-      alert(`Room created: ${generatedRoomId}`);
-    }, 1500);
+      navigate(`/editor/${generatedRoomId}`);
+    }
+    catch(err){
+      setIsCreating(false);
+      if(err.response && err.response.status === 401){
+        toast.error(err.response.data.message);
+        navigate('/login');
+      }
+      else
+        toast.error(err.response.data.message);
+    }
   };
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-100 font-mono">
-      {/* <Navbar/> */}
 
       <div className="max-w-2xl mx-auto px-6 py-16">
-        <div className="text-center mb-12 mt-12">
+        <div className="text-center mb-12 mt-10">
           <div className="bg-blue-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
             <Code className="h-8 w-8 text-white" />
           </div>
@@ -99,14 +113,11 @@ export default function CreateRoomPage() {
                 className="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-3 text-white focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400 transition-colors"
               >
                 {languages.map((lang) => (
-                  <option key={lang.value} value={lang.value} className="bg-gray-900">
+                  <option key={lang.value} value={lang.label} className="bg-gray-900">
                     {lang.label}
                   </option>
                 ))}
               </select>
-              {/* <p className="text-gray-400 text-sm mt-1">
-                You can always switch languages later in the editor
-              </p> */}
             </div>
 
             {/* Room ID Generator */}

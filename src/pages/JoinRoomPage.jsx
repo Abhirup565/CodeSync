@@ -4,21 +4,35 @@ import {
   ArrowRight, 
   Info, 
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 export default function JoinRoomPage() {
   const [roomId, setRoomId] = useState('');
   const [isJoining, setIsJoining] = useState(false);
 
+  const navigate = useNavigate();
   const handleJoinRoom = async () => {
     if (!roomId.trim()) return;
     
     setIsJoining(true);
     // Simulate API call
-    setTimeout(() => {
+    try{
+      const response = await axios.post("http://localhost:7500/room/join-room", {roomId}, {withCredentials: true});
+      toast.success(response.data.message);
       setIsJoining(false);
-      alert(`Joining room: ${roomId}`);
-    }, 1500);
+      navigate(`/editor/${roomId}`);
+    }
+    catch(err){
+      if(err.response && err.response.status === 401){
+        toast.error(err.response.data.message);
+        navigate("/login");
+      }
+      else
+        toast.error(err.response.data.message);
+      setIsJoining(false);
+    }
   };
 
   return (
@@ -26,7 +40,7 @@ export default function JoinRoomPage() {
       {/* <Navbar/> */}
 
       <div className="max-w-2xl mx-auto px-6 py-16">
-        <div className="text-center mb-12 mt-12">
+        <div className="text-center mb-12 mt-10">
           <div className="bg-green-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6">
             <Users className="h-8 w-8 text-white" />
           </div>
@@ -45,7 +59,7 @@ export default function JoinRoomPage() {
               type="text"
               value={roomId}
               onChange={(e) => setRoomId(e.target.value)}
-              placeholder="Enter room ID (e.g., ROOM-123-ABC)"
+              placeholder="Enter room ID (e.g., ROOM-1234-ABCD)"
               className="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:border-green-400 focus:outline-none focus:ring-1 focus:ring-green-400 transition-colors"
             />
           </div>
@@ -95,7 +109,7 @@ export default function JoinRoomPage() {
                 </div>
                 <div>
                   <p className="text-gray-300">
-                    <strong className="text-white">Enter the Room ID</strong> in the field above (format: ROOM-XXX-XXX)
+                    <strong className="text-white">Enter the Room ID</strong> in the field above (format: ROOM-XXXX-XXXX)
                   </p>
                 </div>
               </div>

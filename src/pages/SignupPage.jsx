@@ -10,6 +10,8 @@ import {
   Loader,
   UserPlus
 } from 'lucide-react';
+import toast from 'react-hot-toast';
+
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
     firstName: '',
@@ -120,17 +122,17 @@ export default function RegisterPage() {
     if (!validateForm()) return;
     
     setIsRegistering(true);
-    // Simulate API call
+    // Make API call
     e.preventDefault();
     try{
       const response = await axios.post("http://localhost:7500/auth/sign-up", formData, {withCredentials: true});
       setIsRegistering(false);
-      alert(response.data.message);
       navigate('/');
+      toast.success(response.data.message);
     }
     catch(err){
+      toast.error(err.response.data.message);
       setIsRegistering(false);
-      alert(err.response.data.message);
     }
   };
 
