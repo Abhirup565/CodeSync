@@ -1,12 +1,14 @@
+require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const key = "theEarthIsSpherical";
+const key = process.env.JWT_SECRET;
 
 function setUser(user){
     return(
         jwt.sign({
             _id: user._id,
             username: user.username,
-            firstname: user.firstname
+            firstname: user.firstname,
+            lastname: user.lastname
         }, key)
     );
 }

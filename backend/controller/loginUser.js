@@ -18,7 +18,8 @@ async function loginUser(req, res){
         return res.cookie("uid", token, {
             httpOnly: true,
             secure: false,
-            maxAge: 14*24*60*60*1000 // cookie expires in 14 days in millisecond 
+            maxAge: 14*24*60*60*1000, // cookie expires in 14 days in millisecond
+            path: '/'
         }).status(200).json({message: `Welcome back, ${user.firstname}`});
     }
     catch(err){

@@ -1,20 +1,20 @@
-import {useState} from "react";
-import { 
-  Code, 
-  Copy, 
-  Shuffle, 
-  ArrowRight, 
-  Info, 
+import { useState } from "react";
+import {
+  Code,
+  Copy,
+  Shuffle,
+  ArrowRight,
+  Info,
   CheckCircle,
-  AlertCircle 
+  AlertCircle
 } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-export default function CreateRoomPage() {
+export default function CreateRoomPage({ setRoomsFetched, setLoadingRooms }) {
   const [roomTitle, setRoomTitle] = useState('');
-  const [selectedLanguage, setSelectedLanguage] = useState('javascript');
+  const [selectedLanguage, setSelectedLanguage] = useState({ value: 'javascript', label: 'JavaScript' });
   const [generatedRoomId, setGeneratedRoomId] = useState('');
   const [isCreating, setIsCreating] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -52,18 +52,20 @@ export default function CreateRoomPage() {
   const navigate = useNavigate();
   const handleCreateRoom = async () => {
     if (!roomTitle.trim() || !generatedRoomId) return;
-    
+
     setIsCreating(true);
     // Making API call
-    try{
-      const response = await axios.post("http://localhost:7500/room/create-room", {roomTitle, selectedLanguage, generatedRoomId}, {withCredentials: true});
+    try {
+      const response = await axios.post("http://localhost:7500/room/create-room", { roomTitle, selectedLanguage, generatedRoomId }, { withCredentials: true });
       toast.success(response.data.message);
       setIsCreating(false);
+      setRoomsFetched(false);
+      setLoadingRooms(true);
       navigate(`/editor/${generatedRoomId}`);
     }
-    catch(err){
+    catch (err) {
       setIsCreating(false);
-      if(err.response && err.response.status === 401){
+      if (err.response && err.response.status === 401) {
         toast.error(err.response.data.message);
         navigate('/login');
       }
@@ -108,12 +110,15 @@ export default function CreateRoomPage() {
                 Programming Language
               </label>
               <select
-                value={selectedLanguage}
-                onChange={(e) => setSelectedLanguage(e.target.value)}
+                value={selectedLanguage.value}
+                onChange={(e) => {
+                  const lang = languages.find(lan => lan.value === e.target.value);
+                  setSelectedLanguage(lang);
+                }}
                 className="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-3 text-white focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400 transition-colors"
               >
                 {languages.map((lang) => (
-                  <option key={lang.value} value={lang.label} className="bg-gray-900">
+                  <option key={lang.value} value={lang.value} className="bg-gray-900">
                     {lang.label}
                   </option>
                 ))}
@@ -134,7 +139,7 @@ export default function CreateRoomPage() {
                   <span>Generate</span>
                 </button>
               </div>
-              
+
               {generatedRoomId ? (
                 <div className="flex items-center space-x-2">
                   <input
@@ -189,7 +194,7 @@ export default function CreateRoomPage() {
               <Info className="h-5 w-5 text-blue-400 mr-2" />
               <h3 className="text-lg font-semibold text-white">Next Steps</h3>
             </div>
-            
+
             <div className="space-y-4">
               <div className="flex items-start space-x-3">
                 <div className="bg-green-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold flex-shrink-0 mt-0.5">

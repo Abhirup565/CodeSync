@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const http = require('http');
 const cookieParser = require('cookie-parser');
@@ -8,7 +9,7 @@ const {Server} = require('socket.io');
 const cors = require('cors');
 
 const app = express();
-const port = 7500;
+const port = process.env.PORT || 7500;
 
 const server = http.createServer(app);
 
@@ -31,7 +32,7 @@ app.use(cors({
 }));
 
 //Connect mongoDB
-connectDB('mongodb://localhost:27017/CodeSync');
+connectDB(process.env.MONGODB_URI);
 
 //Routes
 app.use("/auth", authRoutes);

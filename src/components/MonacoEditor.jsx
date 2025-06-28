@@ -1,6 +1,8 @@
 import { Editor } from "@monaco-editor/react"
 export default function MonacoEditor({
-    code, setCode
+    code,
+    setCode,
+    language
 }) {
     return (
         <div className="flex-1 bg-gray-900 relative">
@@ -8,7 +10,7 @@ export default function MonacoEditor({
                 <div className="w-full h-full bg-gray-900 relative">
                     <Editor
                         height="100%"
-                        defaultLanguage="javascript"
+                        language={language.value}
                         value={code}
                         onChange={(value) => setCode(value)}
                         theme="vs-dark"

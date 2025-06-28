@@ -1,31 +1,35 @@
 import React, { useState } from 'react';
-import { 
-  Users,  
-  ArrowRight, 
-  Info, 
+import {
+  Users,
+  ArrowRight,
+  Info,
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-export default function JoinRoomPage() {
+export default function JoinRoomPage({
+  setRoomsFetched, setLoadingRooms
+}) {
   const [roomId, setRoomId] = useState('');
   const [isJoining, setIsJoining] = useState(false);
 
   const navigate = useNavigate();
   const handleJoinRoom = async () => {
     if (!roomId.trim()) return;
-    
+
     setIsJoining(true);
     // Simulate API call
-    try{
-      const response = await axios.post("http://localhost:7500/room/join-room", {roomId}, {withCredentials: true});
+    try {
+      const response = await axios.post("http://localhost:7500/room/join-room", { roomId }, { withCredentials: true });
       toast.success(response.data.message);
       setIsJoining(false);
+      setRoomsFetched(false);
+      setLoadingRooms(true);
       navigate(`/editor/${roomId}`);
     }
-    catch(err){
-      if(err.response && err.response.status === 401){
+    catch (err) {
+      if (err.response && err.response.status === 401) {
         toast.error(err.response.data.message);
         navigate("/login");
       }
@@ -90,7 +94,7 @@ export default function JoinRoomPage() {
               <Info className="h-5 w-5 text-blue-400 mr-2" />
               <h3 className="text-lg font-semibold text-white">How to Join a Room</h3>
             </div>
-            
+
             <div className="space-y-4">
               <div className="flex items-start space-x-3">
                 <div className="bg-green-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold flex-shrink-0 mt-0.5">

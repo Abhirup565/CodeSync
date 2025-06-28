@@ -10,7 +10,7 @@ const roomSchema = new mongoose.Schema({
         required: true,
     },
     language: {
-        type: String,
+        type: Object,
         required: true, 
     },
     members: {

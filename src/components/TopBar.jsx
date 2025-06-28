@@ -28,7 +28,7 @@ export default function TopBar({
 
         <div className="flex items-center space-x-3">
           <h1 className="text-lg font-semibold text-white">{roomTitle}</h1>
-          <span className="bg-blue-600 text-white px-2 py-1 rounded text-xs">{language}</span>
+          <span className="bg-blue-600 text-white px-2 py-1 rounded text-xs">{language.label}</span>
         </div>
       </div>
 

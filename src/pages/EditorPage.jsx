@@ -19,7 +19,7 @@ export default function EditorPage() {
   // State management
   const [username, setUsername] = useState('');
   const [roomTitle, setRoomTitle] = useState('');
-  const [language, setLanguage] = useState('');
+  const [language, setLanguage] = useState({});
   const [copied, setCopied] = useState(false);
   const [chatOpen, setChatOpen] = useState(false);
   const [unseenMessages, setUnseenMessages] = useState(0);
@@ -228,7 +228,7 @@ Execution time: 0.032s`);
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Code Editor */}
-          <MonacoEditor code={code} setcode={setCode} />
+          <MonacoEditor code={code} setcode={setCode} language={language} />
 
           {/* Resize Handle */}
           <div
@@ -270,12 +270,8 @@ Execution time: 0.032s`);
                 </button>
               </div>
             </div>
-            <div className="flex-1 p-4 text-green-400 text-sm font-mono overflow-y-auto">
+            <div className="flex-1 p-4 text-white text-sm font-mono overflow-y-auto">
               <pre className="whitespace-pre-wrap">{output}</pre>
-              <div className="flex items-center mt-2">
-                <span className="text-green-400">$</span>
-                <span className="ml-2 animate-pulse">_</span>
-              </div>
             </div>
           </div>
         </div>
