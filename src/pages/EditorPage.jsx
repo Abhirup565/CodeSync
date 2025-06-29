@@ -18,6 +18,7 @@ export default function EditorPage() {
   const { roomId } = useParams();
   // State management
   const [username, setUsername] = useState('');
+  const [myColor, setMyColor] = useState();
   const [roomTitle, setRoomTitle] = useState('');
   const [language, setLanguage] = useState({});
   const [copied, setCopied] = useState(false);
@@ -25,17 +26,9 @@ export default function EditorPage() {
   const [unseenMessages, setUnseenMessages] = useState(0);
   const [outputHeight, setOutputHeight] = useState(200);
   const [isResizing, setIsResizing] = useState(false);
-  const [code, setCode] = useState(`// Welcome to CodeSync - Collaborative Editor
-function calculateFactorial(n) {
-  if (n <= 1) return 1;
-  return n * calculateFactorial(n - 1);
-}
-
-// Test the function
-console.log('Factorial of 5:', calculateFactorial(5));
-
-// TODO: Add error handling for negative numbers
-// TODO: Optimize for large numbers`);
+  const [code, setCode] = useState(`//Welcome to Code sync - Collaborative Editor.
+//Start coding together in real-time.
+//Use chat section to have intuitive discusions.`);
 
   const [output] = useState(`$ node factorial.js
 Factorial of 5: 120
@@ -43,7 +36,8 @@ Factorial of 5: 120
 Process finished with exit code 0
 Execution time: 0.032s`);
 
-  const color = ['#10B981', '#3B82F6', '#8B5CF6', '#F59E0B', '#EF4444'];
+  const colorIndexRef = useRef(0);
+  const color = ['#8B5CF6', '#F59E0B', '#EF4444', '#10B981', '#3B82F6'];
   const [members, setMembers] = useState([]);
 
   const [messages, setMessages] = useState([]);
@@ -68,7 +62,7 @@ Execution time: 0.032s`);
           {
             name: (member === username) ? `${member} (You)` : member,
             online: false,
-            color: color[Math.floor(Math.random() * color.length)]
+            color: color[(colorIndexRef.current++) % color.length]
           }
         )).sort((a, b) => (a.name.includes("(You)") ? -1 : b.name.includes("(You)") ? 1 : 0))
         );
@@ -80,10 +74,14 @@ Execution time: 0.032s`);
     fetchRoomData();
   }, []);
 
+  const myMember = members.find(m => m.name.includes(username));
+  const mycolor = myMember ? myMember.color : "#8884d8";
+
   const chatOpenRef = useRef(chatOpen);
   useEffect(() => {
     chatOpenRef.current = chatOpen;
   }, [chatOpen]);
+
 
   //webSocket setup
   const socketRef = useRef(null);
@@ -108,7 +106,7 @@ Execution time: 0.032s`);
             return [...prev, {
               name: username,
               online: true,
-              color: color[Math.floor(Math.random() * color.length)]
+              color: color[(colorIndexRef.current++) % color.length]
             }];
           }
         }
@@ -228,7 +226,7 @@ Execution time: 0.032s`);
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Code Editor */}
-          <MonacoEditor code={code} setcode={setCode} language={language} />
+          <MonacoEditor code={code} setCode={setCode} language={language} roomId={roomId} username={username} color={mycolor} />
 
           {/* Resize Handle */}
           <div
