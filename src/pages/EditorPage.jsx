@@ -158,20 +158,10 @@ Execution time: 0.032s`);
   // Toggle chat and reset unseen messages
   const toggleChat = () => {
     setChatOpen(!chatOpen);
-    if (chatRef.current)
-      chatRef.current.scrollTop = chatRef.current.scrollHeight;
     if (!chatOpen) {
       setUnseenMessages(0);
     }
   };
-
-  const chatRef = useRef(null);
-
-  function isUserAtBottom(ref, threshold = 50) {
-    if (!ref.current) return true;
-    const { scrollTop, scrollHeight, clientHeight } = ref.current;
-    return scrollHeight - (scrollTop + clientHeight) < threshold;
-  }
 
   // Send message
   const sendMessage = () => {
@@ -288,7 +278,6 @@ Execution time: 0.032s`);
           newMessage={newMessage}
           setNewMessage={setNewMessage}
           sendMessage={sendMessage}
-          chatRef={chatRef}
         />)}
       </div>
     </div>

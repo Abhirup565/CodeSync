@@ -20,6 +20,7 @@ export default function MonacoEditor({ code, language, roomId, username, color, 
         if (code === lastSaved) return;
         lastSaved = code;
         try {
+            setSaving(true);
             await axios.post("http://localhost:7500/code/save-code", { roomId, code });
             setTimeout(() => {
                 setSaving(false);
@@ -47,7 +48,6 @@ export default function MonacoEditor({ code, language, roomId, username, color, 
         const debouncedSave = debounce(() => {
             const latestCode = yText.toString();
             autosave(latestCode);
-            setSaving(true);
         }, 2000);
 
         const observer = () => {

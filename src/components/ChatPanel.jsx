@@ -1,15 +1,44 @@
 import {
     Triangle
 } from 'lucide-react';
-import { useRef } from 'react';
+import { useRef, useEffect, useState } from 'react';
 
 export default function ChatPanel({
     messages,
     newMessage,
     setNewMessage,
     sendMessage,
-    chatRef
 }) {
+    const chatRef = useRef(null);
+    const [atBottom, setAtBottom] = useState(true);
+
+    useEffect(() => {
+        const ele = chatRef.current
+        if (ele) {
+            ele.scrollTop = ele.scrollHeight;
+        }
+        const handleScroll = () => {
+            const threshold = 50;
+            const isBottom = ele.scrollHeight - ele.scrollTop - ele.clientHeight < threshold;
+            setAtBottom(isBottom);
+        };
+        ele.addEventListener("scroll", handleScroll);
+        return () => ele.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    useEffect(() => {
+        const ele = chatRef.current;
+        if (!ele || messages.length === 0) return;
+        const lastMsg = messages[messages.length - 1];
+
+        if (lastMsg.isOwn || atBottom) {
+            requestAnimationFrame(() => {
+                ele.scrollTop = ele.scrollHeight;
+                console.log("scrolled");
+            });
+        }
+    }, [messages]);
+
     return (
         <div className="w-80 bg-gray-800 border-l border-gray-700 flex flex-col h-full z-10">
             <div className="p-4 border-b border-gray-700">
