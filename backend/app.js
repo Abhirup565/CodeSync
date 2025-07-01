@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const {connectDB} = require('./connectMongoDB');
 const authRoutes = require('./routes/authRoutes');
 const roomRoutes = require('./routes/roomRoutes');
+const editorRoutes = require('./routes/editorRoutes');
 const {Server} = require('socket.io');
 const cors = require('cors');
 
@@ -37,6 +38,7 @@ connectDB(process.env.MONGODB_URI);
 //Routes
 app.use("/auth", authRoutes);
 app.use("/room", roomRoutes);
+app.use("/code", editorRoutes);
 
 server.listen(port, ()=>{
     console.log(`server started at port ${port}`);

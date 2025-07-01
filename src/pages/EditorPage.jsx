@@ -18,7 +18,6 @@ export default function EditorPage() {
   const { roomId } = useParams();
   // State management
   const [username, setUsername] = useState('');
-  const [myColor, setMyColor] = useState();
   const [roomTitle, setRoomTitle] = useState('');
   const [language, setLanguage] = useState({});
   const [copied, setCopied] = useState(false);
@@ -26,9 +25,9 @@ export default function EditorPage() {
   const [unseenMessages, setUnseenMessages] = useState(0);
   const [outputHeight, setOutputHeight] = useState(200);
   const [isResizing, setIsResizing] = useState(false);
-  const [code, setCode] = useState(`//Welcome to Code sync - Collaborative Editor.
-//Start coding together in real-time.
-//Use chat section to have intuitive discusions.`);
+  const [code, setCode] = useState("");
+  const [loadingCode, setLoadingCode] = useState(true);
+  const [saving, setSaving] = useState(false);
 
   const [output] = useState(`$ node factorial.js
 Factorial of 5: 120
@@ -66,9 +65,17 @@ Execution time: 0.032s`);
           }
         )).sort((a, b) => (a.name.includes("(You)") ? -1 : b.name.includes("(You)") ? 1 : 0))
         );
+
+        //fetch the latest code from db
+        const codeRes = await axios.get(`http://localhost:7500/code/get-code?roomId=${roomId}`);
+        setCode(codeRes.data.code || `//Welcome to Code sync - Collaborative Editor.
+//Start coding together in real-time.
+//Use chat section to have intuitive discusions.`);
+        setLoadingCode(false);
       }
       catch (err) {
         console.log(err);
+        setLoadingCode(false);
       }
     }
     fetchRoomData();
@@ -217,6 +224,7 @@ Execution time: 0.032s`);
         chatOpen={chatOpen}
         toggleChat={toggleChat}
         unseenMessages={unseenMessages}
+        saving={saving}
       />
 
       <div className="flex flex-1 overflow-hidden">
@@ -226,7 +234,7 @@ Execution time: 0.032s`);
         {/* Main Content Area */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Code Editor */}
-          <MonacoEditor code={code} setCode={setCode} language={language} roomId={roomId} username={username} color={mycolor} />
+          {!loadingCode && <MonacoEditor code={code} language={language} roomId={roomId} username={username} color={mycolor} setSaving={setSaving} />}
 
           {/* Resize Handle */}
           <div

@@ -3,8 +3,10 @@ import * as Y from "yjs";
 import { MonacoBinding } from "y-monaco";
 import { useRef, useEffect, useState } from "react";
 import { HocuspocusProvider } from "@hocuspocus/provider";
+import { debounce } from "lodash";
+import axios from "axios";
 
-export default function MonacoEditor({ code, setCode, language, roomId, username, color }) {
+export default function MonacoEditor({ code, language, roomId, username, color, setSaving }) {
     const editorRef = useRef(null);
     const monacoRef = useRef(null);
     const providerRef = useRef(null);
@@ -12,6 +14,22 @@ export default function MonacoEditor({ code, setCode, language, roomId, username
     const bindingRef = useRef(null);
     const remoteDecorations = useRef({});
     const [providerReady, setProviderReady] = useState(false);
+
+    let lastSaved = "";
+    async function autosave(code) {
+        if (code === lastSaved) return;
+        lastSaved = code;
+        try {
+            await axios.post("http://localhost:7500/code/save-code", { roomId, code });
+            setTimeout(() => {
+                setSaving(false);
+            }, 2000);
+        }
+        catch (err) {
+            console.error("Autosave failed: ", err);
+            setSaving(false);
+        }
+    }
 
     useEffect(() => {
         const ydoc = new Y.Doc();
@@ -24,16 +42,26 @@ export default function MonacoEditor({ code, setCode, language, roomId, username
         providerRef.current = provider;
         ydocRef.current = ydoc;
 
-        provider.awareness.setLocalStateField("user", {
-            name: username || "Anonymous",
-            color: color || "#00bfff",
-        });
+        const yText = ydoc.getText("monaco");
+
+        const debouncedSave = debounce(() => {
+            const latestCode = yText.toString();
+            autosave(latestCode);
+            setSaving(true);
+        }, 2000);
+
+        const observer = () => {
+            debouncedSave();
+        }
+
+        yText.observe(observer);
 
         provider.on("synced", () => {
             setProviderReady(true);
         });
 
         return () => {
+            yText.unobserve(observer);
             provider.awareness.setLocalState(null);
             provider.destroy();
             ydoc.destroy();
@@ -43,7 +71,16 @@ export default function MonacoEditor({ code, setCode, language, roomId, username
             }
             setProviderReady(false);
         };
-    }, [roomId, username, color]);
+    }, [roomId]);
+    useEffect(() => {
+        const provider = providerRef.current;
+        if (provider) {
+            provider.awareness.setLocalStateField("user", {
+                name: username || "Anonymous",
+                color: color || "#00bfff",
+            });
+        }
+    }, [username, color]);
 
     function handleEditorDidMount(editor, monaco) {
         editorRef.current = editor;
@@ -54,10 +91,13 @@ export default function MonacoEditor({ code, setCode, language, roomId, username
 
         if (!ydoc || !provider || !editor) return;
 
-        const yText = ydoc.getText("monaco");
-
         if (bindingRef.current) {
             bindingRef.current.destroy();
+        }
+
+        const yText = ydoc.getText("monaco");
+        if (yText.length === 0 && code) {
+            yText.insert(0, code);
         }
 
         bindingRef.current = new MonacoBinding(
@@ -84,6 +124,9 @@ export default function MonacoEditor({ code, setCode, language, roomId, username
                     editor.deltaDecorations(oldDecorations, []);
                     delete remoteDecorations.current[clientId];
                 }
+                const styleId = `cursor-style-${clientId}`;
+                const styleEl = document.getElementById(styleId);
+                if (styleEl) styleEl.remove();
             });
 
             states.forEach(([clientId, state]) => {

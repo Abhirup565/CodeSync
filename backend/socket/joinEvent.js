@@ -10,9 +10,10 @@ module.exports = (io, socket)=>{
             type: "joined"
         });
 
-        io.emit('update-members', {roomId, type: "joined"});
+        // io.emit('update-members', {roomId, type: "joined"});
 
-        //get all the online users for the newly joined user
+
+        //send all the online users for the newly joined user
         io.in(roomId).fetchSockets().then(sockets => {
             const onlineUsers = sockets.map(s => s.username);
 

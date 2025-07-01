@@ -80,7 +80,12 @@ export default function MyRooms({
           return room;
         })
       );
-    })
+    });
+    return () => {
+      if (socket.current) {
+        socket.current.disconnect();
+      }
+    }
   }, []);
 
   const languages = {

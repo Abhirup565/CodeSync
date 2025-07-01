@@ -6,6 +6,7 @@ import {
   MessageSquareText,
   X
 } from 'lucide-react';
+import { useState } from 'react';
 export default function TopBar({
   roomTitle,
   language,
@@ -14,7 +15,8 @@ export default function TopBar({
   copied,
   chatOpen,
   toggleChat,
-  unseenMessages
+  unseenMessages,
+  saving
 }) {
   return (
     <div className="bg-gray-800 border-b border-gray-700 px-4 py-3 flex items-center justify-between flex-shrink-0">
@@ -29,6 +31,10 @@ export default function TopBar({
         <div className="flex items-center space-x-3">
           <h1 className="text-lg font-semibold text-white">{roomTitle}</h1>
           <span className="bg-blue-600 text-white px-2 py-1 rounded text-xs">{language.label}</span>
+          {saving ?
+            (<span className='flex items-center text-gray-300 ml-5 text-[14px]'>Saving...</span>
+            ) : (<span className='flex items-center text-green-300 ml-5 text-[14px]'><CheckCircle className='size-3 mr-1' />Saved</span>)
+          }
         </div>
       </div>
 
