@@ -26,11 +26,8 @@ export default function EditorPage({ setInvalidRoute }) {
   const [loadingCode, setLoadingCode] = useState(true);
   const [saving, setSaving] = useState(false);
   const [roomNotFound, setRoomNotFound] = useState(false);
-  const [output] = useState(`$ node factorial.js
-Factorial of 5: 120
-
-Process finished with exit code 0
-Execution time: 0.032s`);
+  const [running, setRunning] = useState(false);
+  const [output, setOutput] = useState("");
 
   const [members, setMembers] = useState([]);
   const [messages, setMessages] = useState([]);
@@ -143,6 +140,21 @@ Execution time: 0.032s`);
         setUnseenMessages(prev => prev + 1);
       }
     });
+
+    //Listen for code running state
+    socketRef.current.on('code-running', ({ username }) => {
+      setRunning(true);
+      setOutput("");
+      toast(`${username} is running the code`, {
+        icon: '▶️',
+        position: 'top-left'
+      });
+    });
+    socketRef.current.on('code-stopped', () => setRunning(false));
+
+    //listen for code output
+    socketRef.current.on('code-output', ({ output }) => setOutput(output));
+
     return () => socketRef.current.disconnect();
   }, [username, roomId]);
 
@@ -176,6 +188,14 @@ Execution time: 0.032s`);
       socketRef.current.emit('send-message', { roomId, sender: username, message: message.message });
     }
   };
+
+  //handle code running
+  function handleRun() {
+    if (running) return;
+    setRunning(true);
+    setOutput("");
+    socketRef.current.emit('run-code', { roomId, username, code, language: language.value });
+  }
 
   // Handle resize
   useEffect(() => {
@@ -214,6 +234,8 @@ Execution time: 0.032s`);
           toggleChat={toggleChat}
           unseenMessages={unseenMessages}
           saving={saving}
+          running={running}
+          handleRun={handleRun}
         />
 
         <div className="flex flex-1 overflow-hidden">
@@ -223,7 +245,15 @@ Execution time: 0.032s`);
           {/* Main Content Area */}
           {!loadingCode && <div className="flex-1 flex flex-col overflow-hidden">
             {/* Code Editor */}
-            <MonacoEditor code={code} language={language} roomId={roomId} username={username} color={mycolor} setSaving={setSaving} />
+            <MonacoEditor
+              code={code}
+              setCode={setCode}
+              language={language}
+              roomId={roomId}
+              username={username}
+              color={mycolor}
+              setSaving={setSaving}
+            />
 
             {/* Resize Handle */}
             <div
@@ -241,7 +271,7 @@ Execution time: 0.032s`);
             </div>
 
             {/* Output/Terminal */}
-            <OutputBox output={output} outputHeight={outputHeight} setOutputHeight={setOutputHeight} />
+            <OutputBox output={output} outputHeight={outputHeight} setOutputHeight={setOutputHeight} roomTitle={roomTitle} />
           </div>}
 
           {/* Chat Panel */}

@@ -56,7 +56,7 @@ export default function FeatureSection() {
             </div>
             <h3 className="text-xl font-semibold mb-4 text-white">Autosave to Database</h3>
             <p className="text-gray-300">
-              Never lose a line - CodeSync's intelligent autosave keeps your code safe in real time. Every keystroke is automatically saved and synced across sessions using CRDT-powered Yjs with Hocuspocus, ensuring seamless recovery and uninterrupted collaboration.
+              Never lose a line - CodeSync's intelligent autosave keeps your code safe in real time. Every keystroke is automatically saved and synced across sessions, ensuring seamless recovery and uninterrupted collaboration.
             </p>
           </div>
         </div>

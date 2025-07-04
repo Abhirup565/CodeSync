@@ -4,7 +4,7 @@ import {
   CheckCircle,
   Copy,
   MessageSquareText,
-  X
+  LoaderCircle
 } from 'lucide-react';
 import { useState } from 'react';
 export default function TopBar({
@@ -16,7 +16,9 @@ export default function TopBar({
   chatOpen,
   toggleChat,
   unseenMessages,
-  saving
+  saving,
+  running,
+  handleRun
 }) {
   return (
     <div className="bg-gray-800 border-b border-gray-700 px-4 py-3 flex items-center justify-between flex-shrink-0">
@@ -39,9 +41,23 @@ export default function TopBar({
       </div>
 
       <div className="flex items-center space-x-4">
-        <button className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm transition-colors flex items-center space-x-2">
-          <Play className="h-4 w-4" />
-          <span>Run</span>
+        <button
+          disabled={running}
+          onClick={handleRun}
+          className={`bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm transition-colors flex items-center justify-center space-x-2
+    ${running ? "opacity-60 cursor-not-allowed" : "cursor-pointer"}`}
+        >
+          {!running ? (
+            <>
+              <Play className="h-4 w-4" />
+              <span>Run</span>
+            </>
+          ) : (
+            <>
+              <LoaderCircle className="h-4 w-4 animate-spin" />
+              <span>Run</span>
+            </>
+          )}
         </button>
 
         <div className={`flex items-center space-x-2`}>

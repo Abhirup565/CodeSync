@@ -1,6 +1,6 @@
 import { Plus, Minus, Terminal } from "lucide-react"
 
-export default function OutputBox({ outputHeight, setOutputHeight, output }) {
+export default function OutputBox({ outputHeight, setOutputHeight, output, roomTitle }) {
     return (
         <div
             className="bg-black border-t border-gray-700 flex-shrink-0 flex flex-col"
@@ -27,6 +27,7 @@ export default function OutputBox({ outputHeight, setOutputHeight, output }) {
                 </div>
             </div>
             <div className="flex-1 p-4 text-white text-sm font-mono overflow-y-auto">
+                <p className="text-green-400">CodeSync/{roomTitle.split(" ").join("_")}</p>
                 <pre className="whitespace-pre-wrap">{output}</pre>
             </div>
         </div>

@@ -11,6 +11,7 @@ import MyRooms from "./pages/MyRooms";
 import EditorPage from "./pages/EditorPage";
 import { useState, useEffect } from "react";
 import ProtectedRoute from "./components/ProtectedRoute";
+import PublicRoute from "./components/PublicRoute";
 import axios from "axios";
 import ErrorPage from "./pages/ErrorPage";
 
@@ -45,8 +46,18 @@ function App() {
           <Route path="/" element={<Home isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} setLoadingRooms={setLoadingRooms} />} />
           <Route path="/join-room" element={<JoinRoomPage setRoomsFetched={setRoomsFetched} setLoadingRooms={setLoadingRooms} />} />
           <Route path="/create-room" element={<CreateRoomPage setRoomsFetched={setRoomsFetched} setLoadingRooms={setLoadingRooms} />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<SignupPage />} />
+          <Route path="/login"
+            element={
+              <PublicRoute isLoggedIn={isLoggedIn}>
+                <LoginPage />
+              </PublicRoute>
+            } />
+          <Route path="/register"
+            element={
+              <PublicRoute isLoggedIn={isLoggedIn}>
+                <SignupPage />
+              </PublicRoute>
+            } />
           <Route path="/my-rooms" element={<MyRooms
             roomsFetched={roomsFetched}
             setRoomsFetched={setRoomsFetched}

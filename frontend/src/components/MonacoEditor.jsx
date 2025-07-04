@@ -5,8 +5,9 @@ import { useRef, useEffect, useState } from "react";
 import { HocuspocusProvider } from "@hocuspocus/provider";
 import { debounce } from "lodash";
 import axios from "axios";
+import toast from 'react-hot-toast';
 
-export default function MonacoEditor({ code, language, roomId, username, color, setSaving }) {
+export default function MonacoEditor({ code, setCode, language, roomId, username, color, setSaving }) {
     const editorRef = useRef(null);
     const monacoRef = useRef(null);
     const providerRef = useRef(null);
@@ -35,9 +36,15 @@ export default function MonacoEditor({ code, language, roomId, username, color, 
     useEffect(() => {
         const ydoc = new Y.Doc();
         const provider = new HocuspocusProvider({
-            url: "ws://localhost:1234",
+            url: "wss://hocuspocus-server-dzhh.onrender.com",
             name: roomId,
             document: ydoc,
+            maxBackoffTime: 10000, //retry every 10s
+            onDisconnect: () => {
+                toast.error("Failed to connect. Please check your internet connection");
+                console.warn('Disconnected. Retrying...')
+            },
+            onConnect: () => console.log('Connected')
         });
 
         providerRef.current = provider;
@@ -51,7 +58,9 @@ export default function MonacoEditor({ code, language, roomId, username, color, 
         }, 2000);
 
         const observer = () => {
+            const latestCode = yText.toString();
             debouncedSave();
+            setCode && setCode(latestCode);
         }
 
         yText.observe(observer);
@@ -148,7 +157,6 @@ export default function MonacoEditor({ code, language, roomId, username, color, 
                     afterContentClassName: `remote-cursor-label user-${clientId}`,
                     stickiness: monaco.editor.TrackedRangeStickiness.NeverGrowsWhenTypingAtEdges,
                 };
-                console.log(user);
                 // 💡 Inject dynamic style for this user's label
                 const styleId = `cursor-style-${clientId}`;
                 if (!document.getElementById(styleId)) {

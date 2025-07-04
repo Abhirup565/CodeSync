@@ -6,7 +6,7 @@ const {connectDB} = require('./connectMongoDB');
 const authRoutes = require('./routes/authRoutes');
 const roomRoutes = require('./routes/roomRoutes');
 const editorRoutes = require('./routes/editorRoutes');
-const {Server} = require('socket.io');
+const {Server: SocketIoServer} = require('socket.io');
 const cors = require('cors');
 
 const app = express();
@@ -15,7 +15,7 @@ const port = process.env.PORT || 7500;
 const server = http.createServer(app);
 
 //setting up websocket server
-const io = new Server(server, {
+const io = new SocketIoServer(server, {
     cors: {
         origin: 'http://localhost:5173',
         credentials: true
