@@ -155,6 +155,10 @@ export default function EditorPage({ setInvalidRoute }) {
     //listen for code output
     socketRef.current.on('code-output', ({ output }) => setOutput(output));
 
+    socketRef.current.on('judge0-limit-reached', ({ message }) => {
+      toast.error(message);
+    })
+
     return () => socketRef.current.disconnect();
   }, [username, roomId]);
 

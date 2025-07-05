@@ -56,15 +56,13 @@ export default function MyRooms({
   useEffect(() => {
     socket.current = io('http://localhost:7500');
 
-    socket.current.on('update-members', ({ roomId, type }) => {
+    socket.current.on('update-members', ({ roomId, count }) => {
       setRooms(prevRooms =>
         prevRooms.map(room => {
           if (room.id === roomId) {
             return {
               ...room,
-              memberCount: type === "left"
-                ? Math.max(room.memberCount - 1, 0)
-                : room.memberCount + 1
+              memberCount: count
             };
           }
           return room;
@@ -116,6 +114,7 @@ export default function MyRooms({
       setTimeout(() => setDeleteConfirm(''), 3000);
     }
   };
+
   const navigate = useNavigate();
   const enterRoom = (roomId, roomTitle) => {
     toast.success(`Joined room: ${roomTitle}`);

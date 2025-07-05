@@ -99,7 +99,7 @@ export default function CreateRoomPage({ setRoomsFetched, setLoadingRooms }) {
                 type="text"
                 value={roomTitle}
                 onChange={(e) => setRoomTitle(e.target.value)}
-                placeholder="e.g., Frontend Team Sprint, API Development, Bug Fix Session"
+                placeholder="Enter room title"
                 className="w-full bg-gray-900 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:border-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-400 transition-colors"
               />
             </div>

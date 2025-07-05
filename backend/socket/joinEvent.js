@@ -1,17 +1,21 @@
+const roomModel = require('../models/rooms');
+
 module.exports = (io, socket)=>{
-    socket.on('join-room', ({roomId, username})=>{
+    socket.on('join-room', async ({roomId, username})=>{
         socket.join(roomId);
         socket.username = username;
         socket.roomId = roomId;
+
+        const room = await roomModel.findOne({room_id: roomId});
+        const count = room ? room.members.length : 0;
+
+        io.emit('update-members', {roomId, count});
 
         //Notify all other users in the room
         socket.to(roomId).emit('presence-update', {
             username,
             type: "joined"
         });
-
-        // io.emit('update-members', {roomId, type: "joined"});
-
 
         //send all the online users for the newly joined user
         io.in(roomId).fetchSockets().then(sockets => {
@@ -29,5 +33,12 @@ module.exports = (io, socket)=>{
             username: socket.username,
             type: "left"
         });
-    })
+    });
+
+    //Handle delete-room event
+    socket.on('delete-room', async ({roomId}) =>{
+        const room = await roomModel.findOne({room_id: roomId});
+        const count = room ? room.members.length : 0;
+        io.emit('update-members', {roomId, count});
+    });
 }
