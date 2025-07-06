@@ -17,7 +17,7 @@ const server = http.createServer(app);
 //setting up websocket server
 const io = new SocketIoServer(server, {
     cors: {
-        origin: 'https://codesync-six-gules.vercel.app/',
+        origin: 'https://codesync-six-gules.vercel.app',
         credentials: true
     }
 });
@@ -28,7 +28,7 @@ require('./socket')(io);
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-    origin: 'https://codesync-six-gules.vercel.app/',
+    origin: 'https://codesync-six-gules.vercel.app',
     credentials: true
 }));
 
