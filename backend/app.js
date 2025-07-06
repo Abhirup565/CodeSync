@@ -40,6 +40,10 @@ app.use("/auth", authRoutes);
 app.use("/room", roomRoutes);
 app.use("/code", editorRoutes);
 
+app.get('/',(req, res)=>{
+    res.send("server is running.");
+});
+
 server.listen(port, ()=>{
     console.log(`server started at port ${port}`);
 });
