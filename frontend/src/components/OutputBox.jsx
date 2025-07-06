@@ -26,9 +26,9 @@ export default function OutputBox({ outputHeight, setOutputHeight, output, roomT
                     </button>
                 </div>
             </div>
-            <div className="flex-1 p-4 text-white text-sm font-mono overflow-y-auto">
+            <div className="flex-1 p-4 text-white text-sm font-mono overflow-auto">
                 <p className="text-green-400">CodeSync/{roomTitle.split(" ").join("_")}</p>
-                <pre className="whitespace-pre-wrap">{output}</pre>
+                <pre>{output}</pre>
             </div>
         </div>
     )

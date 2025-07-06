@@ -107,6 +107,6 @@ module.exports = (io, socket) =>{
         setTimeout(() => {
             runningRooms[roomId] = false;
             io.in(roomId).emit('code-stopped');
-        }, 1000);
+        }, 500);
     })
 }

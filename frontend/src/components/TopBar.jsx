@@ -4,9 +4,9 @@ import {
   CheckCircle,
   Copy,
   MessageSquareText,
-  LoaderCircle
+  LoaderCircle,
+  AlignJustify
 } from 'lucide-react';
-import { useState } from 'react';
 export default function TopBar({
   roomTitle,
   language,
@@ -18,29 +18,32 @@ export default function TopBar({
   unseenMessages,
   saving,
   running,
-  handleRun
+  handleRun,
+  setShowSidebar
 }) {
   return (
     <div className="bg-gray-800 border-b border-gray-700 px-4 py-3 flex items-center justify-between flex-shrink-0">
       <div className="flex items-center space-x-4">
-        <div className="flex items-center space-x-2">
+        <div className="hidden md:flex items-center space-x-2">
           <Terminal className="h-5 w-5 text-green-400" />
           <span className="font-bold text-white">CodeSync</span>
         </div>
 
-        <div className="h-4 w-px bg-gray-600"></div>
+        {/*hamburger icon for mobile*/}
+        <button onClick={() => { setShowSidebar(prev => !prev) }} className='p-1'>
+          <AlignJustify className="md:hidden h-5 w-5 text-white" />
+        </button>
+
+        <div className="hidden md:block h-4 w-px bg-gray-600"></div>
 
         <div className="flex items-center space-x-3">
-          <h1 className="text-lg font-semibold text-white">{roomTitle}</h1>
-          <span className="bg-blue-600 text-white px-2 py-1 rounded text-xs">{language.label}</span>
-          {saving ?
-            (<span className='flex items-center text-gray-300 ml-5 text-[14px]'>Saving...</span>
-            ) : (<span className='flex items-center text-green-300 ml-5 text-[14px]'><CheckCircle className='size-3 mr-1' />Saved</span>)
-          }
+          <h1 className="text-lg font-semibold text-white truncate max-w-[15rem]">{roomTitle}</h1>
+          <span className="hidden md:block bg-blue-600 text-white px-2 py-1 rounded text-xs">{language.label}</span>
+          <span className='hidden md:flex items-center text-gray-300 ml-5 text-[14px]'>{saving ? ("Saving...") : (<><CheckCircle className='size-3 mr-1 text-green-400' />Saved</>)}</span>
         </div>
       </div>
 
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-20 md:space-x-4">
         <button
           disabled={running}
           onClick={handleRun}
@@ -60,7 +63,7 @@ export default function TopBar({
           )}
         </button>
 
-        <div className={`flex items-center space-x-2`}>
+        <div className={`hidden md:flex items-center space-x-2`}>
           <span className="text-gray-300 text-sm">{roomId}</span>
           <button
             onClick={copyRoomId}

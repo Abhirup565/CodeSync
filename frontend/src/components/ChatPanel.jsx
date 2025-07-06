@@ -41,7 +41,7 @@ export default function ChatPanel({
     }, [messages]);
 
     return (
-        <div className={chatOpen ? "w-80 bg-gray-800 border-l border-gray-700 flex flex-col h-full z-10 transition-all duration-400" : "opacity-0 w-80 bg-gray-800 border-l border-gray-700 flex flex-col h-full z-10 mr-[-20rem] transition-all duration-400"}>
+        <div className={chatOpen ? "relative right-0 w-80 bg-gray-800 border-l border-gray-700 flex flex-col h-full z-10 transition-all duration-400" : "opacity-0 w-80 bg-gray-800 border-l border-gray-700 flex flex-col h-full z-10 mr-[-20rem] transition-all duration-400"}>
             <div className="p-4 border-b border-gray-700">
                 <h3 className="text-lg font-semibold text-white">Team Chat</h3>
             </div>

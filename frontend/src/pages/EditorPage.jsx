@@ -28,6 +28,7 @@ export default function EditorPage({ setInvalidRoute }) {
   const [roomNotFound, setRoomNotFound] = useState(false);
   const [running, setRunning] = useState(false);
   const [output, setOutput] = useState("");
+  const [showSidebar, setShowSidebar] = useState(false);
 
   const [members, setMembers] = useState([]);
   const [messages, setMessages] = useState([]);
@@ -175,6 +176,7 @@ export default function EditorPage({ setInvalidRoute }) {
     if (!chatOpen) {
       setUnseenMessages(0);
     }
+    setShowSidebar(false);
   };
 
   // Send message
@@ -199,6 +201,7 @@ export default function EditorPage({ setInvalidRoute }) {
     setRunning(true);
     setOutput("");
     socketRef.current.emit('run-code', { roomId, username, code, language: language.value });
+    setShowSidebar(false);
   }
 
   // Handle resize
@@ -240,11 +243,19 @@ export default function EditorPage({ setInvalidRoute }) {
           saving={saving}
           running={running}
           handleRun={handleRun}
+          setShowSidebar={setShowSidebar}
         />
 
         <div className="flex flex-1 overflow-hidden">
           {/* Left Sidebar - Members */}
-          <MembersSideBar members={members} />
+          <MembersSideBar
+            members={members}
+            roomId={roomId}
+            copyRoomId={copyRoomId}
+            showSidebar={showSidebar}
+            setShowSidebar={setShowSidebar}
+            language={language}
+          />
 
           {/* Main Content Area */}
           {!loadingCode && <div className="flex-1 flex flex-col overflow-hidden">
