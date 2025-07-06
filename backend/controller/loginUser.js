@@ -17,7 +17,8 @@ async function loginUser(req, res){
         const token = setUser(user);
         return res.cookie("uid", token, {
             httpOnly: true,
-            secure: false,
+            secure: true,
+            sameSite: 'none',
             maxAge: 14*24*60*60*1000, // cookie expires in 14 days in millisecond
             path: '/'
         }).status(200).json({message: `Welcome back, ${user.firstname}`});

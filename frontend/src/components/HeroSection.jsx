@@ -20,7 +20,7 @@ export default function HeroSection({ isLoggedIn }) {
   }, []);
 
   return (
-    <section className="relative px-6 overflow-hidden h-screen grid place-content-center" style={{ background: "url(src/images/herosectionbg2.jpg)", backgroundRepeat: "no-repeat" }}>
+    <section className="relative px-6 overflow-hidden h-screen grid place-content-center" style={{ background: "url(/images/herosectionbg2.jpg)", backgroundRepeat: "no-repeat" }}>
 
       <div className="max-w-6xl mx-auto text-center relative z-10">
         <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white mt-10">
