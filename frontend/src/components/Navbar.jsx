@@ -17,7 +17,7 @@ export default function Navbar({ isLoggedIn, invalidRoute }) {
     }, [location.pathname]);
 
     function handleLogout() {
-        axios.post('http://localhost:7500/auth/logout', {}, { withCredentials: true })
+        axios.post('https://codesync-server-7x03.onrender.com/auth/logout', {}, { withCredentials: true })
             .then((res) => {
                 window.location.href = '/';
             })

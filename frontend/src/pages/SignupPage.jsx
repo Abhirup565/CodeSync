@@ -38,7 +38,7 @@ export default function RegisterPage() {
 
     // Simulate API call
     try {
-      const response = await axios.post("http://localhost:7500/auth/username-exists", { userName: username.toLowerCase() });
+      const response = await axios.post("https://codesync-server-7x03.onrender.com/auth/username-exists", { userName: username.toLowerCase() });
       const isTaken = response.data.isTaken;
 
       setUsernameStatus({
@@ -125,7 +125,7 @@ export default function RegisterPage() {
     // Make API call
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:7500/auth/sign-up", formData, { withCredentials: true });
+      const response = await axios.post("https://codesync-server-7x03.onrender.com/auth/sign-up", formData, { withCredentials: true });
       setIsRegistering(false);
       navigate('/');
       toast.success(response.data.message);

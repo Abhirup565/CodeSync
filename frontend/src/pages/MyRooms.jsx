@@ -26,7 +26,7 @@ export default function MyRooms({
 
   useEffect(() => {
     if (isLoggedIn && !roomsFetched) {
-      axios.get("http://localhost:7500/room/get-rooms", { withCredentials: true })
+      axios.get("https://codesync-server-7x03.onrender.com/room/get-rooms", { withCredentials: true })
         .then((res) => {
           const roomsArr = res.data.rooms.map(room => (
             {
@@ -54,7 +54,7 @@ export default function MyRooms({
 
   const socket = useRef(null);
   useEffect(() => {
-    socket.current = io('http://localhost:7500');
+    socket.current = io('https://codesync-server-7x03.onrender.com');
 
     socket.current.on('update-members', ({ roomId, count }) => {
       setRooms(prevRooms =>
@@ -99,7 +99,7 @@ export default function MyRooms({
   const deleteRoom = async (roomId) => {
     if (deleteConfirm === roomId) {
       try {
-        const res = await axios.post("http://localhost:7500/room/delete-room", { roomId, username: isLoggedIn.username });
+        const res = await axios.post("https://codesync-server-7x03.onrender.com/room/delete-room", { roomId, username: isLoggedIn.username });
         toast.success(res.data.message);
 
         socket.current.emit('delete-room', { roomId });

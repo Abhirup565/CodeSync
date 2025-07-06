@@ -44,10 +44,10 @@ export default function EditorPage({ setInvalidRoute }) {
   useEffect(() => {
     async function fetchRoomData() {
       try {
-        const user = await axios.get('http://localhost:7500/auth/profile', { withCredentials: true });
+        const user = await axios.get('https://codesync-server-7x03.onrender.com/auth/profile', { withCredentials: true });
         const username = user.data.user.username;
 
-        const res = await axios.post("http://localhost:7500/room/get-room-details", { roomId });
+        const res = await axios.post("https://codesync-server-7x03.onrender.com/room/get-room-details", { roomId });
         setUsername(username);
         setRoomTitle(res.data.room_title);
         setLanguage(res.data.language);
@@ -62,7 +62,7 @@ export default function EditorPage({ setInvalidRoute }) {
         );
 
         //fetch the latest code from db
-        const codeRes = await axios.get(`http://localhost:7500/code/get-code?roomId=${roomId}`);
+        const codeRes = await axios.get(`https://codesync-server-7x03.onrender.com/code/get-code?roomId=${roomId}`);
         setCode(codeRes.data.code || `//Welcome to Code sync - Collaborative Editor.
 //Start coding together in real-time.
 //Use chat section to have intuitive discusions.`);
@@ -91,7 +91,7 @@ export default function EditorPage({ setInvalidRoute }) {
 
   useEffect(() => {
     if (!username || !roomId) return;
-    socketRef.current = io('http://localhost:7500', { withCredentials: true });
+    socketRef.current = io('https://codesync-server-7x03.onrender.com', { withCredentials: true });
 
     socketRef.current.emit('join-room', { roomId, username });
 
