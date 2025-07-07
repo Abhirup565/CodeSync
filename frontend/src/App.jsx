@@ -70,7 +70,7 @@ function App() {
           <Route path="/editor/:roomId"
             element={
               <ProtectedRoute isLoggedIn={isLoggedIn} authLoading={authLoading}>
-                <EditorPage setInvalidRoute={setInvalidRoute} />
+                <EditorPage setInvalidRoute={setInvalidRoute} setRoomsFetched={setRoomsFetched} />
               </ProtectedRoute>
             }
           />

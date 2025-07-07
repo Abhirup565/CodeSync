@@ -7,6 +7,7 @@ import axios from "axios";
 export default function Navbar({ isLoggedIn, invalidRoute }) {
     const [showPopup, setShowPopup] = useState(false);
     const [showMobileNav, setShowMobileNav] = useState(false);
+    const [loggingout, setLoggingout] = useState(false);
     const location = useLocation();
 
     function isActive(path) {
@@ -14,12 +15,18 @@ export default function Navbar({ isLoggedIn, invalidRoute }) {
     }
     useEffect(() => {
         setShowMobileNav(false);
+        setShowPopup(false);
     }, [location.pathname]);
 
     function handleLogout() {
+        setLoggingout(true);
         axios.post('https://codesync-server-7x03.onrender.com/auth/logout', {}, { withCredentials: true })
             .then((res) => {
                 window.location.href = '/';
+                setLoggingout(false);
+            })
+            .catch(() => {
+                setLoggingout(false);
             })
     }
 
@@ -57,7 +64,7 @@ export default function Navbar({ isLoggedIn, invalidRoute }) {
                         </div>
                         {/* avatar icon popup */}
                         {showPopup && <div className="hidden md:block absolute right-15 top-20">
-                            <NavIconPopup user={isLoggedIn} handleLogout={handleLogout} />
+                            <NavIconPopup user={isLoggedIn} handleLogout={handleLogout} loggingout={loggingout} />
                         </div>}
 
                         {/*navbar for mobile*/}
@@ -70,13 +77,13 @@ export default function Navbar({ isLoggedIn, invalidRoute }) {
                 <div className={showMobileNav ?
                     "absolute left-1/2 top-48 -translate-1/2 w-full bg-slate-900 md:hidden flex p-8 transition-all duration-300 opacity-100" :
                     "absolute left-1/2 top-[-10rem] -translate-1/2 w-full bg-slate-900 md:hidden flex p-8 transition-all duration-300 opacity-0"}>
-                    <div className="flex flex-col space-y-6">
+                    <div className="flex flex-col space-y-6 font-mono">
                         <Link to="/" className={isActive("/") ? "text-white" : "text-gray-300 hover:text-white transition-colors"}>Home</Link>
                         <Link to={isLoggedIn ? "/join-room" : "/login"} className={isActive("/join-room") ? "text-white" : "text-gray-300 hover:text-white transition-colors"}>Join Room</Link>
                         <Link to={isLoggedIn ? "/create-room" : "/login"} className={isActive("/create-room") ? "text-white" : "text-gray-300 hover:text-white transition-colors"}>Create Room</Link>
                         <Link to="/my-rooms" className={isActive("/my-rooms") ? "text-white" : "text-gray-300 hover:text-white transition-colors"}>My Rooms</Link>
                     </div>
-                    <div className="ml-auto mr-6">
+                    <div className="ml-auto mr-6 font-mono">
                         {isLoggedIn ? (
                             <div className="flex flex-col items-center">
                                 <div className="size-12 bg-green-600 rounded-full md:hidden flex items-center justify-center cursor-pointer mb-4">
@@ -84,8 +91,8 @@ export default function Navbar({ isLoggedIn, invalidRoute }) {
                                 </div>
                                 <p className="text-xl text-white mb-1 font-bold truncate max-w-[14rem]">{isLoggedIn.firstname} {isLoggedIn.lastname}</p>
                                 <p className="text-gray-300 text-[15px]">Username: {isLoggedIn.username}</p>
-                                <button onClick={handleLogout} className="bg-red-600 hover:bg-red-700 text-white rounded-lg cursor-pointer text-center text-sm w-full flex items-center justify-center pt-2 pb-2 mt-5 font-bold">
-                                    <LogOut className='size-4' />&nbsp;
+                                <button onClick={handleLogout} disabled={loggingout} className="bg-red-600 hover:bg-red-700 text-white rounded-lg cursor-pointer text-center text-sm w-full flex items-center justify-center pt-2 pb-2 mt-5 font-bold">
+                                    {!loggingout ? <LogOut className='size-4' /> : <LoaderCircle className='size-4 animate-spin' />}&nbsp;
                                     <span>Sign out</span>
                                 </button>
                             </div>

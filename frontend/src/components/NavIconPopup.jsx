@@ -1,7 +1,7 @@
 import {
-    LogOut
+    LogOut, LoaderCircle
 } from 'lucide-react';
-export default function NavIconPopup({ user, handleLogout }) {
+export default function NavIconPopup({ user, handleLogout, loggingout }) {
 
     return (
         <div className="flex flex-col items-center rounded-lg bg-slate-800 border border-gray-700 p-5 text-white">
@@ -12,8 +12,8 @@ export default function NavIconPopup({ user, handleLogout }) {
                 <p className="text-xl mb-1 font-bold">{user.firstname} {user.lastname}</p>
                 <p className="text-gray-300 text-[15px]">Username: {user.username}</p>
             </div>
-            <button onClick={handleLogout} className="bg-red-600 hover:bg-red-700 rounded-lg cursor-pointer text-center w-full flex items-center justify-center p-2 mt-5 font-bold">
-                <LogOut className='size-4' />&nbsp;
+            <button onClick={handleLogout} disabled={loggingout} className="bg-red-600 hover:bg-red-700 rounded-lg cursor-pointer text-center w-full flex items-center justify-center p-2 mt-5 font-bold">
+                {!loggingout ? <LogOut className='size-4' /> : <LoaderCircle className='size-4 animate-spin' />}&nbsp;
                 <span>Sign out</span>
             </button>
         </div>

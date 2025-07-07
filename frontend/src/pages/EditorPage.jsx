@@ -11,7 +11,7 @@ import MonacoEditor from '../components/MonacoEditor';
 import ErrorPage from './ErrorPage';
 import OutputBox from '../components/OutputBox';
 
-export default function EditorPage({ setInvalidRoute }) {
+export default function EditorPage({ setInvalidRoute, setRoomsFetched }) {
   const { roomId } = useParams();
   // State management
   const [username, setUsername] = useState('');
@@ -52,10 +52,16 @@ export default function EditorPage({ setInvalidRoute }) {
         setRoomTitle(res.data.room_title);
         setLanguage(res.data.language);
 
+        //check if username exists in the room
+        const user_exists = res.data.members.find((member) => member === username);
+        if (!user_exists) {
+          res.data.members.push(username);
+        }
+
         setMembers(res.data.members.map((member) => (
           {
             name: (member === username) ? `${member} (You)` : member,
-            online: false,
+            online: (member === username) ? true : false,
             color: color[(colorIndexRef.current++) % color.length]
           }
         )).sort((a, b) => (a.name.includes("(You)") ? -1 : b.name.includes("(You)") ? 1 : 0))
@@ -67,12 +73,20 @@ export default function EditorPage({ setInvalidRoute }) {
 //Start coding together in real-time.
 //Use chat section to have intuitive discusions.`);
         setLoadingCode(false);
+
+        //if the user doesn't exist entry him in the database
+        if (!user_exists) {
+          const response = await axios.post("http://localhost:7500/room/join-room", { roomId }, { withCredentials: true });
+          toast.success(response.data.message);
+        }
       }
       catch (err) {
         if (err.response.status === 404) setRoomNotFound(true);
         if (err.response.status === 500) toast.error("Server error: Couldn't fetch room details.")
         setLoadingCode(false);
       }
+
+      setRoomsFetched(false);
     }
     fetchRoomData();
   }, []);

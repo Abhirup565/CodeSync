@@ -10,6 +10,7 @@ import {
   Search,
   CheckCircle,
   AlertCircle,
+  LoaderCircle
 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -23,6 +24,7 @@ export default function MyRooms({
   const [filterType, setFilterType] = useState('all'); // 'all', 'created', 'joined'
   const [copiedId, setCopiedId] = useState('');
   const [deleteConfirm, setDeleteConfirm] = useState('');
+  const [deletingRoom, setDeletingRoom] = useState('');
 
   useEffect(() => {
     if (isLoggedIn && !roomsFetched) {
@@ -98,15 +100,17 @@ export default function MyRooms({
 
   const deleteRoom = async (roomId) => {
     if (deleteConfirm === roomId) {
+      setDeletingRoom(roomId);
       try {
         const res = await axios.post("https://codesync-server-7x03.onrender.com/room/delete-room", { roomId, username: isLoggedIn.username });
         toast.success(res.data.message);
-
+        setDeletingRoom('');
         socket.current.emit('delete-room', { roomId });
 
         setRooms(rooms.filter(room => room.id !== roomId));
       } catch (err) {
         toast.error(err.response.data.message);
+        setDeletingRoom('');
       }
       setDeleteConfirm('');
     } else {
@@ -305,6 +309,7 @@ export default function MyRooms({
 
                       <button
                         onClick={() => deleteRoom(room.id)}
+                        disabled={deletingRoom === room.id}
                         className={`px-4 py-2 rounded-lg font-semibold transition-colors text-sm cursor-pointer ${deleteConfirm === room.id
                           ? 'bg-red-600 hover:bg-red-700 text-white'
                           : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
@@ -312,7 +317,7 @@ export default function MyRooms({
                       >
                         {deleteConfirm === room.id ? (
                           <div className="flex items-center space-x-1">
-                            <AlertCircle className="h-4 w-4" />
+                            {deletingRoom === room.id ? <LoaderCircle className="size-4 animate-spin" /> : <AlertCircle className="h-4 w-4" />}
                             <span>Confirm</span>
                           </div>
                         ) : (
