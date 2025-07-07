@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Terminal, AlignJustify, LogOut } from "lucide-react";
+import { Terminal, AlignJustify, LogOut, LoaderCircle } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import NavIconPopup from './NavIconPopup';
 import axios from "axios";
