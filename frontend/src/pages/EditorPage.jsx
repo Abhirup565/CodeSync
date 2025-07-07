@@ -76,7 +76,7 @@ export default function EditorPage({ setInvalidRoute, setRoomsFetched }) {
 
         //if the user doesn't exist entry him in the database
         if (!user_exists) {
-          const response = await axios.post("http://localhost:7500/room/join-room", { roomId }, { withCredentials: true });
+          const response = await axios.post("https://codesync-server-7x03.onrender.com/room/join-room", { roomId }, { withCredentials: true });
           toast.success(response.data.message);
         }
       }
