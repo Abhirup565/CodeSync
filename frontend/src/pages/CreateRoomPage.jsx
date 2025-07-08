@@ -56,7 +56,7 @@ export default function CreateRoomPage({ setRoomsFetched, setLoadingRooms }) {
     setIsCreating(true);
     // Making API call
     try {
-      const response = await axios.post("https://codesync-server-7x03.onrender.com/room/create-room", { roomTitle, selectedLanguage, generatedRoomId }, { withCredentials: true });
+      const response = await axios.post("https://codesync-server-sing.onrender.com/room/create-room", { roomTitle, selectedLanguage, generatedRoomId }, { withCredentials: true });
       toast.success(response.data.message);
       setIsCreating(false);
       setRoomsFetched(false);

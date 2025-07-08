@@ -20,7 +20,7 @@ export default function Navbar({ isLoggedIn, invalidRoute }) {
 
     function handleLogout() {
         setLoggingout(true);
-        axios.post('https://codesync-server-7x03.onrender.com/auth/logout', {}, { withCredentials: true })
+        axios.post('https://codesync-server-sing.onrender.com/auth/logout', {}, { withCredentials: true })
             .then((res) => {
                 window.location.href = '/';
                 setLoggingout(false);

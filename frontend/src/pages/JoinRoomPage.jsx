@@ -21,7 +21,7 @@ export default function JoinRoomPage({
     setIsJoining(true);
     // Simulate API call
     try {
-      const response = await axios.post("https://codesync-server-7x03.onrender.com/room/join-room", { roomId }, { withCredentials: true });
+      const response = await axios.post("https://codesync-server-sing.onrender.com/room/join-room", { roomId }, { withCredentials: true });
       toast.success(response.data.message);
       setIsJoining(false);
       setRoomsFetched(false);

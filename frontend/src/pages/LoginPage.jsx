@@ -59,7 +59,7 @@ export default function LoginPage() {
     e.preventDefault();
 
     try {
-      const response = await axios.post("https://codesync-server-7x03.onrender.com/auth/login", formData, { withCredentials: true });
+      const response = await axios.post("https://codesync-server-sing.onrender.com/auth/login", formData, { withCredentials: true });
       setIsLogging(false);
       navigate("/");
       toast.success(response.data.message);

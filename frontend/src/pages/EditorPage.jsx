@@ -44,10 +44,10 @@ export default function EditorPage({ setInvalidRoute, setRoomsFetched }) {
   useEffect(() => {
     async function fetchRoomData() {
       try {
-        const user = await axios.get('https://codesync-server-7x03.onrender.com/auth/profile', { withCredentials: true });
+        const user = await axios.get('https://codesync-server-sing.onrender.com/auth/profile', { withCredentials: true });
         const username = user.data.user.username;
 
-        const res = await axios.post("https://codesync-server-7x03.onrender.com/room/get-room-details", { roomId });
+        const res = await axios.post("https://codesync-server-sing.onrender.com/room/get-room-details", { roomId });
         setUsername(username);
         setRoomTitle(res.data.room_title);
         setLanguage(res.data.language);
@@ -68,7 +68,7 @@ export default function EditorPage({ setInvalidRoute, setRoomsFetched }) {
         );
 
         //fetch the latest code from db
-        const codeRes = await axios.get(`https://codesync-server-7x03.onrender.com/code/get-code?roomId=${roomId}`);
+        const codeRes = await axios.get(`https://codesync-server-sing.onrender.com/code/get-code?roomId=${roomId}`);
         setCode(codeRes.data.code || `//Welcome to Code sync - Collaborative Editor.
 //Start coding together in real-time.
 //Use chat section to have intuitive discusions.`);
@@ -76,7 +76,7 @@ export default function EditorPage({ setInvalidRoute, setRoomsFetched }) {
 
         //if the user doesn't exist entry him in the database
         if (!user_exists) {
-          const response = await axios.post("https://codesync-server-7x03.onrender.com/room/join-room", { roomId }, { withCredentials: true });
+          const response = await axios.post("https://codesync-server-sing.onrender.com/room/join-room", { roomId }, { withCredentials: true });
           toast.success(response.data.message);
         }
       }
@@ -105,7 +105,7 @@ export default function EditorPage({ setInvalidRoute, setRoomsFetched }) {
 
   useEffect(() => {
     if (!username || !roomId) return;
-    socketRef.current = io('https://codesync-server-7x03.onrender.com', { withCredentials: true });
+    socketRef.current = io('https://codesync-server-sing.onrender.com', { withCredentials: true });
 
     socketRef.current.emit('join-room', { roomId, username });
 

@@ -7,7 +7,7 @@ import axios from 'axios';
 
 export default function Homepage({ isLoggedIn, setIsLoggedIn, setLoadingRooms }) {
   useEffect(() => {
-    axios.get("https://codesync-server-7x03.onrender.com/auth/profile", { withCredentials: true })
+    axios.get("https://codesync-server-sing.onrender.com/auth/profile", { withCredentials: true })
       .then((response) => {
         setIsLoggedIn(response.data.user)
       }

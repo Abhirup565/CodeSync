@@ -22,7 +22,7 @@ export default function MonacoEditor({ code, setCode, language, roomId, username
         lastSaved = code;
         try {
             setSaving(true);
-            await axios.post("https://codesync-server-7x03.onrender.com/code/save-code", { roomId, code });
+            await axios.post("https://codesync-server-sing.onrender.com/code/save-code", { roomId, code });
             setTimeout(() => {
                 setSaving(false);
             }, 2000);
