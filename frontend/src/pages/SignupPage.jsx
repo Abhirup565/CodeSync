@@ -117,8 +117,8 @@ export default function RegisterPage() {
   };
 
   const navigate = useNavigate();
-  const handleRegister = async (e) => {
 
+  const handleRegister = async (e) => {
     if (!validateForm()) return;
 
     setIsRegistering(true);
@@ -126,9 +126,19 @@ export default function RegisterPage() {
     e.preventDefault();
     try {
       const response = await axios.post("https://codesync-server-sing.onrender.com/auth/sign-up", formData, { withCredentials: true });
+
+      //delay slightly to allow cookie to be set
+      await new Promise((res) => setTimeout(res, 100));
       setIsRegistering(false);
-      navigate('/');
-      toast.success(response.data.message);
+
+      const hasCookie = document.cookie.includes("uid");
+
+      if (!hasCookie) {
+        toast.error("Looks like your browser blocked cookies. Please enable them to stay logged in");
+      } else {
+        navigate('/');
+        toast.success(response.data.message);
+      }
     }
     catch (err) {
       toast.error(err.response.data.message);

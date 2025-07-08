@@ -60,9 +60,17 @@ export default function LoginPage() {
 
     try {
       const response = await axios.post("https://codesync-server-sing.onrender.com/auth/login", formData, { withCredentials: true });
+      await new Promise((res) => setTimeout(res, 100));
       setIsLogging(false);
-      navigate("/");
-      toast.success(response.data.message);
+
+      const hasCookie = document.cookie.includes("uid");
+
+      if (!hasCookie) {
+        toast.error("Looks like your browser blocked cookies. Please enable them to stay logged in");
+      } else {
+        navigate("/");
+        toast.success(response.data.message);
+      }
     } catch (err) {
       setIsLogging(false);
       toast.error(err.response.data.message);
