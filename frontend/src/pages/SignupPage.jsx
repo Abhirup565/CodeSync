@@ -127,16 +127,17 @@ export default function RegisterPage() {
       const response = await axios.post("https://codesync-server-sing.onrender.com/auth/sign-up", formData, { withCredentials: true });
 
       const res = await axios.get("https://codesync-server-sing.onrender.com/auth/profile", { withCredentials: true });
-      if (!res.data.user) {
-        toast.error("Looks like your browser blocked cookies. Please enable them to stay logged in");
-      } else {
-        navigate("/");
-        toast.success(response.data.message);
-      }
+      navigate("/");
+      toast.success(response.data.message);
       setIsRegistering(false);
     }
     catch (err) {
-      toast.error(err.response.data.message);
+      if (err.response.status === 401) {
+        toast.error("Looks like your browser blocked cookies. Please enable them to stay logged in");
+        navigate("/login");
+      } else {
+        toast.error(err.response.data.message);
+      }
       setIsRegistering(false);
     }
   };
