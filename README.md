@@ -22,7 +22,7 @@
 
 | Layer        | Tech Used |
 |--------------|-----------|
-| **Frontend** | React, React Router, Axios, React Hot Toast |
+| **Frontend** | React, React Router, Monaco Editor, Axios, React Hot Toast, Lucide React Icons|
 | **Backend**  | Express, Node.js, MongoDB |
 | **Collab Engine** | Hocuspocus (Yjs), WebSockets |
 | **Execution** | Judge0 API |
