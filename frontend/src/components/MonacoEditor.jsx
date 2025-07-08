@@ -36,7 +36,7 @@ export default function MonacoEditor({ code, setCode, language, roomId, username
     useEffect(() => {
         const ydoc = new Y.Doc();
         const provider = new HocuspocusProvider({
-            url: "wss://hocuspocus-server-dzhh.onrender.com",
+            url: "wss://hocuspocus-server-sing.onrender.com",
             name: roomId,
             document: ydoc,
             maxBackoffTime: 10000, //retry every 10s
