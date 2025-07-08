@@ -11,6 +11,7 @@
 - 🧠 **Live Collaboration** — Edit code with others in real time using CRDT-powered sync.
 - 🖱️ **Live Cursors & User Labels** — See who’s editing what, with dynamic cursor colors and usernames.
 - 🧪 **Code Execution** — Run code instantly using Judge0 integration.
+- 💬 **Team Chat** - Communicate in real-time with your teammates using integrated text chat.
 - 🔐 **Authentication** — Secure login/signup with cookie-based sessions.
 - 💾 **Autosave** — Never lose progress with backend-synced autosave.
 - 🧩 **Modular Architecture** — Clean separation of frontend, backend, and WebSocket server.
