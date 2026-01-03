@@ -31,6 +31,33 @@
 
 ---
 
+## 📸 Screenshots
+
+<table width="100%">
+  <tr>
+    <td width="50%" align="center">
+      <b>Editor Page</b><br/>
+      <img src="assets/Capture_2026-01-03_16-21-37.png" alt="Editor Page" width="100%"/>
+    </td>
+    <td width="50%" align="center">
+      <b>My Rooms Page</b><br/>
+      <img src="assets/Capture_2026-01-03_16-25-22.png" alt="My Rooms Page" width="100%"/>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" align="center">
+      <b>Create Room Page</b><br/>
+      <img src="assets/Capture_2026-01-03_16-27-13.png" alt="Create Room Page" width="100%"/>
+    </td>
+    <td width="50%" align="center">
+      <b>Join Room Page</b><br/>
+      <img src="assets/Capture_2026-01-03_16-28-06.png" alt="Join Room Page" width="100%"/>
+    </td>
+  </tr>
+</table>
+
+---
+
 ## 🌍 Live Demo
 - 🔗https://codesync-six-gules.vercel.app
 
